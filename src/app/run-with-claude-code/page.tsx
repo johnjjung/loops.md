@@ -112,12 +112,17 @@ export default function RunWithClaudeCodePage() {
         </div>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-3">
+      <section className="space-y-4">
         {setupSteps.map((step) => (
-          <article key={step.title} className="rounded-[28px] border border-line bg-panel p-5">
-            <h2 className="text-xl font-semibold text-ink">{step.title}</h2>
-            <p className="mt-3 text-sm leading-7 text-muted">{step.body}</p>
-            <pre className="mt-5 overflow-x-auto rounded-[24px] border border-line bg-[#1f1b17] p-4 font-mono text-xs leading-6 text-[#f7ebde]">
+          <article
+            key={step.title}
+            className="rounded-[28px] border border-line bg-panel p-5 lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-6 lg:p-6"
+          >
+            <div>
+              <h2 className="text-xl font-semibold text-ink">{step.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-muted">{step.body}</p>
+            </div>
+            <pre className="mt-5 overflow-x-auto rounded-[24px] border border-line bg-[#1f1b17] p-4 font-mono text-xs leading-6 text-[#f7ebde] lg:mt-0 lg:p-5">
               {step.code}
             </pre>
           </article>
