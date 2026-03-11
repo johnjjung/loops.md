@@ -94,7 +94,7 @@ export default function RunWithClaudeCodePage() {
           How to run one real loop with Claude Code.
         </h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-muted sm:text-lg">
-          This page shows one concrete business loop: cold outreach for a B2B growth team. The structure is adapted from Karpathy&apos;s <Link href="https://x.com/karpathy/status/2030371219518931079" className="text-accent underline decoration-accent/40 underline-offset-4">original autoresearch post</Link> and the <Link href="https://github.com/karpathy/autoresearch" className="text-accent underline decoration-accent/40 underline-offset-4">karpathy/autoresearch repo</Link>, but translated into a marketing workflow you can actually run.
+          This page shows one concrete business loop: cold outreach for a B2B growth team. The structure is adapted from {"Karpathy's"} <Link href="https://x.com/karpathy/status/2030371219518931079" className="text-accent underline decoration-accent/40 underline-offset-4">original autoresearch post</Link> and the <Link href="https://github.com/karpathy/autoresearch" className="text-accent underline decoration-accent/40 underline-offset-4">karpathy/autoresearch repo</Link>, but translated into a marketing workflow you can actually run.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
           <Link

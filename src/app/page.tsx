@@ -25,7 +25,7 @@ const experimentSteps = [
 const sourceContext = [
   {
     eyebrow: "Original post",
-    title: "Karpathy&apos;s autoresearch X post",
+    title: "Karpathy's autoresearch X post",
     description:
       "The original post that framed the overnight experiment loop and why autonomous iteration compounds so quickly.",
     href: "https://x.com/karpathy/status/2030371219518931079",
@@ -175,7 +175,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="hidden max-w-md text-sm leading-7 text-muted md:block">
-            The concept is adapted from Karpathy&apos;s autonomous research loop and translated into business systems that can be templated, scored, and repeated.
+            The concept is adapted from {"Karpathy's"} autonomous research loop and translated into business systems that can be templated, scored, and repeated.
           </p>
         </div>
         <div className="grid gap-4 lg:grid-cols-3">
@@ -233,7 +233,7 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <span className="rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">
+                <span className="inline-flex min-w-[9.5rem] items-center justify-center rounded-full border border-line px-4 py-2 font-mono text-xs whitespace-nowrap text-muted">
                   {categoryCounts[category.slug]} templates
                 </span>
               </div>
