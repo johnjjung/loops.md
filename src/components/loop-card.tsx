@@ -13,6 +13,8 @@ const signalTone: Record<LoopTemplate["signalSpeed"], string> = {
 };
 
 export default function LoopCard({ loop, categoryName }: LoopCardProps) {
+  const testingPreview = loop.variables.slice(0, 2).join(", ");
+
   return (
     <Link
       href={`/loops/${loop.slug}`}
@@ -32,15 +34,11 @@ export default function LoopCard({ loop, categoryName }: LoopCardProps) {
         </span>
       </div>
       <p className="mt-4 text-sm leading-7 text-muted">{loop.summary}</p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {loop.tags.slice(0, 3).map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-line bg-white/75 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-muted"
-          >
-            {tag}
-          </span>
-        ))}
+      <div className="mt-5 rounded-[22px] border border-line bg-white/75 px-4 py-3 text-sm text-ink">
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+          Testing
+        </span>
+        <p className="mt-2 leading-7">{testingPreview}</p>
       </div>
       <div className="mt-auto pt-6">
         <div className="flex items-center justify-between border-t border-line pt-4 text-sm text-muted">

@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const navItems = [
-  { href: "/#categories", label: "Categories" },
   { href: "/#featured", label: "Featured" },
   { href: "/#library", label: "Library" },
+  { href: "/run-with-claude-code", label: "Claude Code" },
   { href: "/contribute", label: "Contribute" },
 ];
 

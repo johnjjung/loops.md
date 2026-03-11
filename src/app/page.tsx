@@ -22,6 +22,66 @@ const experimentSteps = [
   },
 ];
 
+const sourceContext = [
+  {
+    eyebrow: "Original post",
+    title: "Karpathy&apos;s autoresearch X post",
+    description:
+      "The original post that framed the overnight experiment loop and why autonomous iteration compounds so quickly.",
+    href: "https://x.com/karpathy/status/2030371219518931079",
+    action: "Read the original post",
+  },
+  {
+    eyebrow: "Reference repo",
+    title: "karpathy/autoresearch",
+    description:
+      "The minimal repo that turns prepare, train, and program files into a repeatable research loop.",
+    href: "https://github.com/karpathy/autoresearch",
+    action: "Open the GitHub repo",
+  },
+  {
+    eyebrow: "Concrete runner",
+    title: "Run one loop with Claude Code",
+    description:
+      "A step-by-step example showing the files, prompts, and scoring cycle for a cold outreach loop.",
+    href: "/run-with-claude-code",
+    action: "See the walkthrough",
+  },
+];
+
+const concreteExamples = [
+  {
+    title: "Cold outreach / positive reply loop",
+    metric: "72h positive reply rate",
+    baseline:
+      "ICP: VP Growth at Series B SaaS. Offer stays fixed: a short teardown of reply quality. Same list source, same inbox pool, same send window.",
+    test:
+      "Generate 3 variants where only the opener changes. Keep the subject line and CTA fixed. Send 100 emails per variant.",
+    decision:
+      "Keep the opener only if it beats control by 20% or more without increasing complaints.",
+  },
+  {
+    title: "Pricing page / anchor test",
+    metric: "Pricing-page CTA rate",
+    baseline:
+      "Same plans, same prices, same CTA. The only thing that changes is which plan is centered or visually highlighted first.",
+    test:
+      "Variant A centers the middle plan. Variant B leads with the premium anchor. Variant C keeps plan order but adds an annual savings anchor above the grid.",
+    decision:
+      "Ship the winner only if CTA rate rises and sales-qualified opportunity rate does not fall.",
+  },
+  {
+    title: "AP/AR / invoice reminder cadence",
+    metric: "On-time payment rate",
+    baseline:
+      "Same customer tier, same payment terms, same finance owner. Every reminder includes the same invoice details and payment instructions.",
+    test:
+      "Test a three-step cadence: due-soon reminder, overdue reminder, and confirm-payment-date note. Only change timing and wording.",
+    decision:
+      "Keep the cadence only if on-time payments rise without increasing complaint or escalation volume.",
+  },
+];
+
 export default function Home() {
   const categories = getCategories();
   const loops = getLoops();
@@ -68,10 +128,10 @@ export default function Home() {
                 Browse the library
               </Link>
               <Link
-                href="/contribute"
+                href="/run-with-claude-code"
                 className="rounded-full border border-line px-5 py-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent"
               >
-                Contribute a loop
+                Run a concrete example
               </Link>
             </div>
           </div>
@@ -101,6 +161,42 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="space-y-5">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-muted">
+              Source context
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-ink sm:text-3xl">
+              Where this idea comes from.
+            </h2>
+          </div>
+          <p className="hidden max-w-md text-sm leading-7 text-muted md:block">
+            The concept is adapted from Karpathy&apos;s autonomous research loop and translated into business systems that can be templated, scored, and repeated.
+          </p>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-3">
+          {sourceContext.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="group rounded-[28px] border border-line bg-panel p-5 transition hover:-translate-y-1 hover:border-accent hover:shadow-[0_16px_45px_rgba(38,30,19,0.08)]"
+            >
+              <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted">
+                {item.eyebrow}
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-ink transition group-hover:text-accent">
+                {item.title}
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-muted">{item.description}</p>
+              <p className="mt-5 font-mono text-xs uppercase tracking-[0.18em] text-accent">
+                {item.action}
+              </p>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -146,6 +242,57 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="space-y-5">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-muted">
+              Concrete examples
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-ink sm:text-3xl">
+              What one real loop looks like in practice.
+            </h2>
+          </div>
+          <Link
+            href="/run-with-claude-code"
+            className="hidden text-sm font-medium text-accent transition hover:text-[color:var(--accent-strong)] md:block"
+          >
+            Full Claude Code walkthrough
+          </Link>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-3">
+          {concreteExamples.map((example) => (
+            <article key={example.title} className="rounded-[28px] border border-line bg-panel p-5">
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-xl font-semibold text-ink">{example.title}</h3>
+                <span className="rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">
+                  {example.metric}
+                </span>
+              </div>
+              <div className="mt-5 space-y-4 text-sm leading-7 text-muted">
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+                    baseline
+                  </p>
+                  <p className="mt-1">{example.baseline}</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+                    test
+                  </p>
+                  <p className="mt-1">{example.test}</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+                    keep / discard
+                  </p>
+                  <p className="mt-1">{example.decision}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section id="featured" className="space-y-5">
         <div className="flex items-end justify-between gap-4">
           <div>
@@ -179,7 +326,7 @@ export default function Home() {
         categories={categories}
         loops={loops}
         title="Search the full template directory"
-        description="Filter by surface, signal speed, tags, and primary metric. Every record includes a visible loop kit so teams can adapt it without guessing the scoring model."
+        description="Use a lighter browser to narrow by category, signal speed, or a single search term. Each card now shows what the loop is actually testing instead of a wall of tags."
       />
 
       <section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">

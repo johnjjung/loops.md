@@ -22,57 +22,44 @@ export default function DirectoryBrowser({
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(lockedCategory ?? "all");
   const [signal, setSignal] = useState("all");
-  const [metric, setMetric] = useState("all");
-  const [activeTag, setActiveTag] = useState("all");
 
   const categoryLabels = useMemo(
     () => Object.fromEntries(categories.map((category) => [category.slug, category.name])),
     [categories],
   );
 
-  const scopedLoops = useMemo(() => {
-    return loops.filter((loop) => {
-      if (lockedCategory) {
-        return loop.category === lockedCategory;
-      }
-
-      return selectedCategory === "all" || loop.category === selectedCategory;
-    });
-  }, [lockedCategory, loops, selectedCategory]);
-
-  const availableMetrics = useMemo(
-    () => Array.from(new Set(scopedLoops.map((loop) => loop.primaryMetric))).sort(),
-    [scopedLoops],
-  );
-
-  const availableTags = useMemo(
-    () => Array.from(new Set(scopedLoops.flatMap((loop) => loop.tags))).sort(),
-    [scopedLoops],
-  );
-
   const filteredLoops = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return scopedLoops
+    return loops
       .filter((loop) => {
+        if (lockedCategory && loop.category !== lockedCategory) {
+          return false;
+        }
+
+        if (!lockedCategory && selectedCategory !== "all" && loop.category !== selectedCategory) {
+          return false;
+        }
+
+        if (signal !== "all" && loop.signalSpeed !== signal) {
+          return false;
+        }
+
+        if (normalizedQuery === "") {
+          return true;
+        }
+
         const haystack = [
           loop.title,
           loop.summary,
           loop.primaryMetric,
           loop.category,
-          loop.audience,
-          ...loop.tags,
           ...loop.variables,
         ]
           .join(" ")
           .toLowerCase();
 
-        const queryMatch = normalizedQuery === "" || haystack.includes(normalizedQuery);
-        const signalMatch = signal === "all" || loop.signalSpeed === signal;
-        const metricMatch = metric === "all" || loop.primaryMetric === metric;
-        const tagMatch = activeTag === "all" || loop.tags.includes(activeTag);
-
-        return queryMatch && signalMatch && metricMatch && tagMatch;
+        return haystack.includes(normalizedQuery);
       })
       .sort((left, right) => {
         if (left.featured !== right.featured) {
@@ -81,7 +68,10 @@ export default function DirectoryBrowser({
 
         return left.title.localeCompare(right.title);
       });
-  }, [activeTag, metric, query, scopedLoops, signal]);
+  }, [lockedCategory, loops, query, selectedCategory, signal]);
+
+  const hasFilters =
+    query.trim() !== "" || signal !== "all" || (!lockedCategory && selectedCategory !== "all");
 
   return (
     <section id="library" className="space-y-5">
@@ -94,20 +84,18 @@ export default function DirectoryBrowser({
             {title}
           </h2>
         </div>
-        <p className="hidden max-w-xl text-sm leading-7 text-muted lg:block">
-          {description}
-        </p>
+        <p className="hidden max-w-xl text-sm leading-7 text-muted lg:block">{description}</p>
       </div>
 
-      <div className="sticky top-24 z-20 rounded-[30px] border border-line bg-[rgba(255,250,242,0.9)] p-4 shadow-[0_18px_50px_rgba(38,30,19,0.05)] backdrop-blur">
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,0.7fr))]">
+      <div className="rounded-[28px] border border-line bg-[rgba(255,250,242,0.86)] p-4 shadow-[0_18px_50px_rgba(38,30,19,0.05)]">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1.35fr)_repeat(2,minmax(0,0.75fr))]">
           <label className="flex flex-col gap-2 text-sm text-muted">
             <span className="font-mono text-[11px] uppercase tracking-[0.18em]">Search</span>
             <input
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Find by title, tag, metric, or variable"
+              placeholder="Search by title, metric, or variable"
               className="rounded-2xl border border-line bg-white/75 px-4 py-3 text-sm text-ink outline-none transition focus:border-accent"
             />
           </label>
@@ -141,67 +129,24 @@ export default function DirectoryBrowser({
               <option value="Slow">Slow</option>
             </select>
           </label>
-          <label className="flex flex-col gap-2 text-sm text-muted">
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em]">Metric</span>
-            <select
-              value={metric}
-              onChange={(event) => setMetric(event.target.value)}
-              className="rounded-2xl border border-line bg-white/75 px-4 py-3 text-sm text-ink outline-none transition focus:border-accent"
-            >
-              <option value="all">All metrics</option>
-              {availableMetrics.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveTag("all")}
-            className={`rounded-full border px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] transition ${
-              activeTag === "all"
-                ? "border-accent bg-[rgba(212,91,55,0.12)] text-accent"
-                : "border-line bg-white/70 text-muted hover:border-accent hover:text-accent"
-            }`}
-          >
-            All tags
-          </button>
-          {availableTags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => setActiveTag((current) => (current === tag ? "all" : tag))}
-              className={`rounded-full border px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] transition ${
-                activeTag === tag
-                  ? "border-accent bg-[rgba(212,91,55,0.12)] text-accent"
-                  : "border-line bg-white/70 text-muted hover:border-accent hover:text-accent"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-4 text-sm text-muted">
         <p>{filteredLoops.length} loops match the current filters.</p>
-        {(query || signal !== "all" || metric !== "all" || activeTag !== "all") && (
+        {hasFilters ? (
           <button
             type="button"
             onClick={() => {
               setQuery("");
               setSignal("all");
-              setMetric("all");
-              setActiveTag("all");
+              setSelectedCategory(lockedCategory ?? "all");
             }}
             className="font-medium text-accent transition hover:text-[color:var(--accent-strong)]"
           >
             Reset filters
           </button>
-        )}
+        ) : null}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
@@ -216,7 +161,7 @@ export default function DirectoryBrowser({
 
       {filteredLoops.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-line bg-panel p-8 text-center text-sm leading-7 text-muted">
-          No loops match the current filters. Clear one filter or search for a broader term.
+          No loops match the current filters. Clear the search or switch signal speed.
         </div>
       ) : null}
     </section>
